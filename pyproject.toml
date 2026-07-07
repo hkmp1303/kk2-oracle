@@ -1,0 +1,19 @@
+[project]
+name = "kk2-oracle"
+version = "0.1.0"
+description = "FastAPI SmolLLM interface"
+license = " GPL-2.0-only"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.139.0",
+    "pandas>=3.0.3",
+    "pydantic-settings>=2.14.2",
+    "python-multipart",
+    "torch>=2.12.1",
+    "transformers>=5.13.0",
+    "uvicorn>=0.50.2",
+]
+
+[tool.uv]
+package = true

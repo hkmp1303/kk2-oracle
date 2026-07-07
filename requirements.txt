@@ -1,0 +1,7 @@
+fastapi
+pandas
+pydantic-settings
+python-multipart
+torch
+transformers
+uvicorn
