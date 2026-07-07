@@ -15,5 +15,8 @@ dependencies = [
     "uvicorn>=0.50.2",
 ]
 
+[project.scripts]
+listen = "app.main:listen"
+
 [tool.uv]
 package = true
