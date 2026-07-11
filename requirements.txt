@@ -1,3 +1,4 @@
+accelerate
 fastapi
 pandas
 pydantic-settings
