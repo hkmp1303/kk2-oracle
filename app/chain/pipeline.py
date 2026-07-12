@@ -1,5 +1,9 @@
+from app.chain.steps import LLMRunner, PromptBuilder, ResponseParser
+from app.schemas import AIResp, GenPrompt
 
+class Pipeline():
 
-class Pipeline
-    def __init__(self):
-        pass
+    @staticmethod
+    def run(question: str) -> str:
+        pipeline = PromptBuilder() | LLMRunner() | ResponseParser.parse
+        return pipeline.invoke(GenPrompt(q=question))

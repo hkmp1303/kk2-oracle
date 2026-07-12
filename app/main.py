@@ -2,15 +2,16 @@ import io
 import pandas as pd
 from contextlib import asynccontextmanager
 from app.chain.pipeline import Pipeline
-from app.chain.steps import load_model, unload_model
+from app.chain.steps import load_model, unload_model, model_loaded, model_name
 from pandas.errors import EmptyDataError
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse as Json
 from app.config import config
 from app.data import Data
-from app.schemas import AIResp, Stats, Upload
+from app.schemas import AIReq, AIResp, Stats, Status, Upload
+from typing import Any, AsyncGenerator
 
-def listen():
+def listen() -> None:
     import uvicorn
     uvicorn.run(
         "app.main:app",
@@ -20,28 +21,26 @@ def listen():
     )
 
 @asynccontextmanager
-async def load_ai(app: FastAPI):
+async def load_ai(app: FastAPI) -> AsyncGenerator[None, Any, None]:
     load_model()
     yield
     unload_model()
 
-def routes():
+def routes() -> FastAPI:
     app = FastAPI(
         title=config.app_name,
         description="Ask the oracle about your CSV-data",
         lifespan=load_ai
     )
 
-    @app.get("/")
-    def root():
-        return {"hello from root v" + app.version}
-
-    @app.get("/health")
-    def health():
-        return {"status": "ok"}
+    @app.get("/health", response_model=Status)
+    async def health() -> Json:
+        if not model_loaded:
+            return Json(status_code=425, content={"status": "Too soon, AI model not loaded"})
+        return Json(status_code=200, content={"status": "ok"})
 
     @app.post("/data/upload", response_model=Upload)
-    async def upload(file: UploadFile = File(...)):
+    async def upload(file: UploadFile = File(...)) -> Json:
         data = await file.read()
         try:
             Data(pd.read_csv(io.BytesIO(data)))
@@ -52,7 +51,7 @@ def routes():
         return Json(status_code=200, content={"status": "ok", "size": len(data)})
 
     @app.get("/data/stats", response_model=Stats)
-    def stats():
+    async def stats() -> Json:
         shape = Data.getShape()
         if shape is None:
             return Json(status_code=412, content={"status": "No data loaded"})
@@ -63,9 +62,14 @@ def routes():
             "desc": Data.desc()
         })
 
-    @app.post("/ai/ask")
-    def ask(q: str):
-        Pipeline.run(q)
+    @app.post("/ai/ask", response_model=AIResp)
+    async def ask(body: AIReq) -> Json:
+        print("q:"+body.q)
+        if not model_loaded:
+            return Json(status_code=425, content={"status": "Model not loaded", "m": model_name()})
+        if Data.data is None:
+            return Json(status_code=412, content={"status": "No data loaded", "m": model_name()})
+        return Json(status_code=200, content={"status": "ok", "a": Pipeline.run(body.q), "m": model_name()})
 
     return app
 
