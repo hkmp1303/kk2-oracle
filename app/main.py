@@ -1,5 +1,8 @@
 import io
 import pandas as pd
+from contextlib import asynccontextmanager
+from app.chain.pipeline import Pipeline
+from app.chain.steps import load_model, unload_model
 from pandas.errors import EmptyDataError
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse as Json
@@ -16,10 +19,17 @@ def listen():
         reload=True
     )
 
+@asynccontextmanager
+async def load_ai(app: FastAPI):
+    load_model()
+    yield
+    unload_model()
+
 def routes():
     app = FastAPI(
-        title=__name__,
+        title=config.app_name,
         description="Ask the oracle about your CSV-data",
+        lifespan=load_ai
     )
 
     @app.get("/")
@@ -46,11 +56,15 @@ def routes():
         shape = Data.getShape()
         if shape is None:
             return Json(status_code=412, content={"status": "No data loaded"})
-        return Json(status_code=200, content={"status": Data.getShape()})
+        return Json(status_code=200, content={
+            "status": "ok",
+            "rows": Data.getShape()[0],
+            "cols": Data.getShape()[1]
+        })
 
     @app.post("/ai/ask")
     def ask(q: str):
-        pass
+        Pipeline.run(q)
 
     return app
 
