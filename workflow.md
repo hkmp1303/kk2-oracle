@@ -89,8 +89,10 @@ Before writing logic:
 - [x] Question request
 - [x] AI response
 - [-] PromptBuilder input/output
-- [-] LLMRunner input/output
+  - [ ] Add data to query
+- [x] LLMRunner input/output
 - [-] ResponseParser input/output
+  - [ ] Join output
 
 ---
 
@@ -102,7 +104,7 @@ Implement:
 
 - [x] Generic Runnable class
 - [x] RunnableSequence
-- [ ] `|` operator
+- [x] `|` operator
 
 Test that chaining works before adding AI
 
@@ -112,26 +114,26 @@ Test that chaining works before adding AI
 
 ## PromptBuilder
 
-- [ ] Accept typed input
-- [ ] Add system prompt
+- [x] Accept typed input
+- [x] Add system prompt
 - [ ] Add dataset statistics
-- [ ] Add user question
-- [ ] Return prompt object
+- [x] Add user question
+- [x] Return prompt object (GeneratedPrompt)
 
 ---
 
 ## LLMRunner
 
 - [x] Load SmolLM
-- [ ] Connect through `transformers.pipeline`
-- [ ] Generate raw output
+- [x] Connect through `transformers.pipeline`
+- [x] Generate raw output (LLMOutput)
 
 ---
 
 ## ResponseParser
 
 - [ ] Parse raw model output
-- [ ] Extract only the useful answer
+- [-] Extract only the useful answer
 - [ ] Return structured response
 
 ---
@@ -146,7 +148,7 @@ LLMRunner
 ResponseParser
 ```
 
-- [ ] Verify the chain works independently of FastAPI
+- [x] Verify the chain works independently of FastAPI
 
 ---
 
@@ -178,7 +180,8 @@ VG:
 
 ## GET /health
 
-- [-] Return status TODO: check subsystems
+- [x] Return status
+  - [x] check subsystems
 
 ---
 
@@ -187,13 +190,14 @@ VG:
 - [x] Upload CSV
 - [x] Validate
 - [x] Store dataset
-- [-] Return metadata TODO Add pandas stats
+- [-] Return metadata
+  - [-] Add pandas stats / shape
 
 ---
 
 ## GET /data/stats
 
-- [ ] Return `describe()` output TODO pandas describe
+- [x] Return `describe()` output
 - [x] Return 404 if no dataset exists
 
 ---
@@ -201,8 +205,8 @@ VG:
 ## POST /ai/ask
 
 - [ ] Validate request
-- [ ] Ensure dataset exists
-- [ ] Execute Runnable chain
+- [x] Ensure dataset exists
+- [x] Execute Runnable chain
 - [ ] Return structured answer
 
 ---
@@ -305,6 +309,7 @@ VG:
 ### AI
 
 - [ ] SmolLM limitations
+  - [ ] hf_token warning - fixed unknown items in config
 - [ ] Bias example
 - [ ] Testing strategy
 
@@ -312,9 +317,12 @@ VG:
 
 - [ ] Runnable advantages
 - [ ] Separation of concerns
+  - [ ] Move all pandas deps to data.py
+  - [ ] Move model from steps to pipeline or new file (ex. llm.py)
 - [ ] Biggest challenge
+  - [ ] Pipeline working
 - [ ] Solution
-
+  - [ ] trail and error, re-run it, iterative
 ---
 
 # Phase 12 – Final Review
@@ -333,6 +341,7 @@ VG:
 
 - [ ] Type hints everywhere
 - [ ] Clear module separation
+  - [ ] Move all pandas deps to data.py
 - [ ] Consistent naming
 - [ ] No duplicated logic
 - [ ] Logging implemented
