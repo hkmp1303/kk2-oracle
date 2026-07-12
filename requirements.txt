@@ -2,6 +2,7 @@ accelerate
 fastapi
 pandas
 pydantic-settings
+pytest
 python-multipart
 torch
 transformers
