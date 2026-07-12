@@ -16,10 +16,14 @@ def test_ai_ask():
     r = client.post("/ai/ask")
     assert r.status_code == 422
 
+def test_data_stats():
+    r = client.get("/data/stats")
+    assert r.status_code == 412
+
 def test_data_upload():
     r = client.post("/data/upload")
     assert r.status_code == 422
 
-def test_data_stats():
-    r = client.get("/data/stats")
-    assert r.status_code == 412
+def test_data_clear():
+    r = client.delete("/data/clear")
+    assert r.status_code == 204

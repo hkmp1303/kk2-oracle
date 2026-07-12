@@ -10,6 +10,10 @@ class Data:
         Data.data = df
 
     @classmethod
+    def clear(cls) -> None:
+        cls.data = None
+
+    @classmethod
     def getShape(cls) -> Tuple[int, int] | None:
         if cls.data is None:
             return None

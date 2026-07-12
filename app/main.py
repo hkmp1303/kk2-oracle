@@ -73,6 +73,11 @@ def routes() -> FastAPI:
             return Json(status_code=412, content={"status": "No data loaded", "m": model_name()})
         return Json(status_code=200, content={"status": "ok", "a": Pipeline.run(body.q), "m": model_name()})
 
+    @app.delete("/data/clear")
+    async def clear() -> Json:
+        Data.clear()
+        return Json(status_code=204, content={"status": "deleted"})
+
     return app
 basicConfig(level=logging.INFO)
 app = routes()
