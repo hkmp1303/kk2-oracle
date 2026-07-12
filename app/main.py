@@ -59,7 +59,8 @@ def routes():
         return Json(status_code=200, content={
             "status": "ok",
             "rows": Data.getShape()[0],
-            "cols": Data.getShape()[1]
+            "cols": Data.getShape()[1],
+            "desc": Data.desc()
         })
 
     @app.post("/ai/ask")

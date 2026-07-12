@@ -8,6 +8,7 @@ class Stats(BaseModel):
     status: str
     cols: int
     rows: int
+    desc: dict
 
 class AIResp(BaseModel):
     a: str

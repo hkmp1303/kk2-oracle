@@ -12,3 +12,6 @@ class Data:
         if Data.data is None:
             return None
         return Data.data.shape
+
+    def desc() -> dict:
+        return Data.data.describe().to_dict(orient="index")
