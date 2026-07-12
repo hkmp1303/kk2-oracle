@@ -1,5 +1,7 @@
 import io
+import logging
 import pandas as pd
+from logging import basicConfig, getLogger
 from contextlib import asynccontextmanager
 from app.chain.pipeline import Pipeline
 from app.chain.steps import load_model, unload_model, model_loaded, model_name
@@ -72,5 +74,5 @@ def routes() -> FastAPI:
         return Json(status_code=200, content={"status": "ok", "a": Pipeline.run(body.q), "m": model_name()})
 
     return app
-
+basicConfig(level=logging.INFO)
 app = routes()

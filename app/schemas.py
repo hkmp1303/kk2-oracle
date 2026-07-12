@@ -4,10 +4,13 @@ from typing import Optional
 #region Pipeline schemas
 
 class GeneratedPrompt(BaseModel):
+    #system_prompt: str
+    #user_prompt: str
+    #dataset_batch: str
     prompt: str
 
 class GenPrompt(BaseModel):
-    prefix_prompt: str = "Check yourself before you wreck yourself"
+    prefix_prompt: str = "You are a helpful data analyst."
     q: str
 
 class LLMOutput(BaseModel):
