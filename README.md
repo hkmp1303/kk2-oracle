@@ -1,10 +1,8 @@
-# kk2-oracle
-FastAPI SmolLLM interface
-# KK2 – AI-Powered Data Analysis API
+# KK2 Oracle: AI-Powered Data Analysis API
 
 ## Overview
 
-This project is a REST API built with **FastAPI*- that allows users to upload a CSV dataset, retrieve descriptive statistics, and ask natural language questions about the dataset using a Large Language Model (LLM).
+This project is a REST API built with **FastAPI*- that allows users to upload a CSV dataset, retrieve descriptive statistics and via interface ask natural language questions about the dataset using a SmolLM LLM.
 
 The application uses a custom **Runnable pipeline*- consisting of three processing steps:
 
@@ -30,13 +28,16 @@ The language model used is **HuggingFaceTB/SmolLM2-135M-Instruct**, accessed thr
 
 ## Technologies
 
-- Python 3.13
+- Python 3.14
 - FastAPI
 - Pydantic
 - Pandas
 - Transformers
 - Hugging Face
 - Uvicorn
+- Pytest
+- Torch
+- Accelerate
 
 ---
 
@@ -54,6 +55,7 @@ app/
 └── schemas.py
 
 tests/
+└── test_*.py
 ```
 
 ---
@@ -88,6 +90,11 @@ HF_TOKEN=your_token_here
 ## Running the Application
 
 Start the API:
+
+```bash
+uv run listen
+```
+Or alternatively:
 
 ```bash
 uv run uvicorn app.main:app --reload
@@ -196,15 +203,6 @@ Extracts the generated answer before returning it to the API.
 
 ---
 
-## Assumptions
-
-- Only one dataset is stored in memory at a time.
-- Uploaded datasets are not persisted after the application stops.
-- The quality of AI responses depends on the capabilities of the SmolLM model.
-- Dataset statistics are used as context instead of the full dataset to reduce prompt size.
-
----
-
 ## Testing
 
 Tests are located in the `tests/` directory.
@@ -212,7 +210,7 @@ Tests are located in the `tests/` directory.
 Run all tests:
 
 ```bash
-pytest
+uv run pytest
 ```
 
 ---
