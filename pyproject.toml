@@ -31,4 +31,4 @@ dev = [
 minversion = "9.0"
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-q"
+addopts = "-x"
